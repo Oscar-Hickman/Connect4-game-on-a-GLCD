@@ -19,7 +19,7 @@ glcd_start
 	clrf	TRISD
 	
 	; Sets RST to 1
-	bsf	LATB,RB5
+	bsf	LATB, RB5
 	
 	; Turns off right half of glcd
 	bsf	LATB,RB1
@@ -33,57 +33,33 @@ glcd_start
 	call	cmd_write
 	call	delay
 
-	movlw	0xB8	    ;set x page (3)
+	
+	
+write_glcd
+	;Sets the address to write to
+	movlw	0xBA	    ;set x page (3)
 	movwf	PORTD
 	call	cmd_write
 
-	movlw	0x40	    ;set Y address (0)
-	movwf	PORTD
-	call	cmd_write
+;	movlw	0x40	    ;set Y address (0)
+;	movwf	PORTD
+;	call	cmd_write
 
-	movlw	0xAB
+	
+	;Write data
+	movlw	0x00
 	movwf	PORTD
 	call	data_write
 	
-	movlw	0x45
-	movwf	PORTD
-	call	data_write
-	
-	movlw	0x68
-	movwf	PORTD
-	call	data_write
-	
-	
-	
-	
-	movlw	0x68
-	movwf	PORTD
-	call	data_write
-	
-	movlw	0x68
-	movwf	PORTD
-	call	data_write
-	
-	movlw	0x68
-	movwf	PORTD
-	call	data_write
-	
-	movlw	0x68
-	movwf	PORTD
-	call	data_write
-	
-	movlw	0x68
-	movwf	PORTD
-	call	data_write
 	
 	call	delay
-	
-	; chip select signal, to select and enable which half you want
-	; E pulsed from low to high.
-	; rst pin
-	goto 	$		    ; Re-run program from start
+	goto 	glcd_start		    ; Re-run program from start
 
-data_write		
+	
+	
+data_write		; chip select signal, to select and enable which half you want
+			; E pulsed from low to high.
+			; rst pin
 	; Sets RS to 1
 	bsf	LATB, RB2
 	; Sets R/w to 0
@@ -94,6 +70,8 @@ data_write
 	bcf	LATB,RB4
 	return
 
+	
+	
 cmd_write
 	; Sets RS to 0
 	bcf	LATB, RB2
@@ -106,15 +84,14 @@ cmd_write
 	call	delay
 	return
 
-delay	movlw	0x11
+delay	movlw	0x00
 	movwf	delay_count
 	movwf	delay_count2
-	
 	
 delay_1	movff	delay_count,delay_count3
 	call	delay_2
 	decfsz	delay_count2
-	bra	delay_1
+	bra	delay_1	   
 	return
 
 delay_2	decfsz	delay_count3
