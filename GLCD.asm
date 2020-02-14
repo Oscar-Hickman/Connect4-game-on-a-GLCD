@@ -1,10 +1,10 @@
 #include p18f87k22.inc
 	
 	
-global glcd_start_left, glcd_start_right, clear_glcd
+    global glcd_start_left, glcd_start_right, clear_glcd
 
 	
-	acs0	udata_acs   ; reserve data space in access ram
+acs0	udata_acs   ; reserve data space in access ram
 delay_count res 1   ; reserve one byte for counter in the delay routine
 delay_count2 res 1
 delay_count3 res 1
@@ -61,13 +61,14 @@ glcd_start_right
 clear_glcd
 	call glcd_start_left
 	clrf 0x03
-	clearhalf
+	incf 0x03
+    clearhalf
 		movlw	0xB8	;x address as 0
-		clear_loop_x
+	    clear_loop_x
 			movwf	0x00	;store x in 0x00
 			clrf	0x01	;store y in 0x01
-			clear_loop_y
-				movfw	0x00
+		    clear_loop_y
+				movwf	0x00
 				call	cmd_write
 				movlw	0x00
 				movwf	PORTD
@@ -83,7 +84,7 @@ clear_glcd
 				cpfseq	0x00	;skips if gone through all rows	
 				goto	clear_loop_x
 				call	glcd_start_right
-				movlw	0x01
+				movlw	0x02
 				cpfseq	0x03	;skips if dun both halfs
 				goto	clearhalf
 	return
@@ -103,7 +104,7 @@ glcd_grid
 	movlw	0x45	;sets y = 5
 	call	cmd_write
 	
-	therest1
+therest1
 		movlw	0x80
 		movwf	PORTD
 		call	data_write
@@ -159,7 +160,7 @@ glcd_grid
 	movlw	0x44	;sets y = 4
 	call	cmd_write
 	clrf	0x01
-	therest2
+therest2
 		movlw	0x80
 		movwf	PORTD
 		call	data_write
@@ -182,7 +183,7 @@ glcd_grid
 	
 	clrf	0x01	;clears the y counter
 	
-	therest3
+therest3
 		movlw	0x80
 		movwf	PORTD
 		call	data_write
@@ -241,7 +242,7 @@ glcd_grid
 	movlw	0x40	;sets y = 0
 	call	cmd_write
 	clrf	0x01
-	therest4
+therest4
 		movlw	0x80
 		movwf	PORTD
 		call	data_write
@@ -314,4 +315,4 @@ delay_1	movff	delay_count,delay_count3
 delay_2	decfsz	delay_count3
 	bra delay_2
 	return
-end
+    end
