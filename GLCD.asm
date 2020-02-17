@@ -1,19 +1,20 @@
 #include p18f87k22.inc
 	
 	
-    global glcd_start_left, glcd_start_right, clear_glcd, cmd_write, data_write, glcd_grid
+    global glcd_start_left, glcd_start_right, c_w, d_w, glcd_grid, glcd_start_left, glcd_start_right
     extern  naughts, crosses
 
 	
 acs0	udata_acs   ; reserve data space in access ram
 delay_count res 1   ; reserve one byte for counter in the delay routine
-delay_count2 res 1
-delay_count3 res 1
-x_ad	res 1
-y_ad	res 1
-ct	res 1
-ct2	res 1
-ct3	res 1
+delay_count2 res 1  ; for delay
+delay_count3 res 1  ; for delay
+ 
+x_ad	res 1	; x address
+y_ad	res 1	; y address
+ct	res 1	; how many times it has done the sixteen columns with just top full
+ct2	res 1	; see whether its done three lots of a full then sixteen columns
+ct3	res 1	; see how many x address' its done
 	
 glcd	code
  
@@ -36,7 +37,7 @@ glcd_start_left
 
 	;Turns the display on
 	movlw	b'00111111'
-	call	cmd_write
+	call	c_w
 	call	delay
 	return
 	
@@ -59,218 +60,140 @@ glcd_start_right
 
 	;Turns the display on
 	movlw	b'00111111'
-	call	cmd_write
+	call	c_w
 	call	delay
 	return
 	
 	
-clear_glcd
-	call glcd_start_left
-	clrf ct
-	clearhalf
-		incf ct		;left/right counter
-		movlw	0xB8	;x address as 0
-		movwf	x_ad	;store x address as 0
-		clear_loop_x
-		    	movlw	0x40	;y address as 0
-			movwf	y_ad
-			movf	x_ad, W	;changes x address
-			call	cmd_write
-			clear_loop_y
-				movlw	0x00	;clear column
-				call	data_write
-				
-				;see if y=63, skip to incf x if true
-				incf	y_ad
-				movlw	0x7F	;y if equal to 63
-				cpfseq	y_ad    ;if y=63, incf x
-				goto	clear_loop_y
-				incf	x_ad	;add one to x
-				movlw	0xBF	;x if equal to 7
-				cpfseq	x_ad	;skips if gone through all rows	
-				goto	clear_loop_x
-				call	glcd_start_right
-				movlw	0x02
-				cpfseq	ct	;skips if dun both halfs
-				goto	clearhalf
-	return
-	
 glcd_grid
-	call glcd_start_left
-	;write left grid and naughts box
+	call glcd_start_left	;write left grid and naughts box
+	
 	movlw	0xB8	;sets x = 0
 	movwf	x_ad
-	clrf	ct3
+	movlw   0x40	;sets y = 0
+	movwf   y_ad
 	
-	bigloop
-	    incf    ct3
-	    incf    x_ad
+	clrf	ct3	;counts its done all 6 rows
+	
+	
+	bigloop	    ;writes a line then 16 one with the top filled, x3, then a full, then 8 empties all x6 
+	    incf    ct3	
 	    movf    x_ad, W
-	    call    cmd_write
-	    movlw   0x44	;sets y = 4
-	    movwf   y_ad
-	    call    cmd_write
+	    call    c_w
+	    movf    y_ad, W
+	    call    c_w
 	
-	    clrf	ct2
-	
-	    loop16
-	        incf    ct2
-	        movlw   0xFF
-	        call    data_write
-	        call    write_eg    ;writes 16 of emptys
-	        movlw   0x03	;counter if done three times
-	        cpfseq  ct2		;sees if its done it three times.	
-	        goto    loop16
-	
+	    movlw   0x00
+	    call    d_w	;writes y = 0 
+	    call    d_w	;writes y = 1 
+	    call    d_w	;writes y = 2 
+	    call    d_w	;writes y = 3 
 	    
-	    movlw   0xFF
-	    call    data_write
-	    movlw   0x80
-	    call    data_write
-	    movlw   0x80
-	    call    data_write    
-	    movlw   0x80
-	    call    data_write    
-	    movlw   0x80
-	    call    data_write    
-	    movlw   0x80
-	    call    data_write    
-	    movlw   0x80
-	    call    data_write
-	    movlw   0x80
-	    call    data_write
+	    call    threesquare	;writes	y = 4 - y = 54 , 3x full then top one
+		
+	    movlw   0xFF	;writes y = 55 
+	    call    d_w
+	    movlw   0x01	;writes y = 56 
+	    call    d_w
+	    call    d_w 	;writes y = 57 
+	    call    d_w	;writes y = 58 
+	    call    d_w	;writes y = 59
+	    call    d_w	;writes y = 60 
+	    call    d_w	;writes y = 61 	
+	    call    d_w	;writes y = 62 	
+	    call    d_w	;writes y = 63
 	    
+	    incf    x_ad
 	    movlw   0x06	;counter if done six times
 	    cpfseq  ct3		;sees if its done it six times.	
+	    goto    bigloop
 	    
-	    
 	
-	
-	
-;	
-;	
-;	    therest1
-;		movlw	0x80
-;		call	data_write
-;		incf	y_ad
-;		movlw	0x3A
-;		cpfseq	y_ad	;if its got to the center
-;		goto	therest1
-;
-;		
-;	movlw	0xB9	;sets x = 1
-;	call	cmd_write
-;	movlw	0x44	;sets y = 4
-;	call	cmd_write
-;	movlw	0xFF
-;	call	data_write
-;	
-;	movlw	0xBA	;sets x = 2
-;	call	cmd_write
-;	movlw	0x44	;sets y = 4
-;	call	cmd_write
-;	movlw	0xFF
-;	call	data_write
-;		
-;	movlw	0xBB	;sets x = 3
-;	call	cmd_write
-;	movlw	0x44	;sets y = 4
-;	call	cmd_write
-;	movlw	0xFF
-;	call	data_write
-;		
-;	movlw	0xBC	;sets x = 4
-;	call	cmd_write
-;	movlw	0x44	;sets y = 4
-;	call	cmd_write
-;	movlw	0xFF
-;	call	data_write
-;		
-;	movlw	0xBD	;sets x = 5
-;	call	cmd_write
-;	movlw	0x44	;sets y = 4
-;	call	cmd_write
-;	movlw	0xFF
-;	call	data_write
-;	
+		
 	;write naughts box and bottom line of the grid
 	call	naughts
 	
+
+	;write right grid and player crosses box
 	
-;	;write right grid and player crosses box
-;	
-;	call glcd_start_right	    
-;	
-;	movlw	0xB8	;sets x = 0
-;	call	cmd_write
-;	movlw	0x40	;sets y = 0
-;	call	cmd_write
-;	
-;	clrf	y_ad	;clears the y counter
-;	
-;	therest3
-;		movlw	0x80
-;		call	data_write
-;		incf	y_ad
-;		movlw	0x3A
-;		cpfseq	y_ad	;if its got to the right side
-;		goto	therest3
-;		
-;		movlw	0xFF
-;		call	data_write
-;		
-;	movlw	0xB9	;sets x = 1
-;	call	cmd_write
-;	movlw	0x7B	;sets y = 59
-;	call	cmd_write
-;	movlw	0xFF
-;	call	data_write
-;	
-;	movlw	0xBA	;sets x = 2
-;	call	cmd_write
-;	movlw	0x7B	;sets y = 59
-;	call	cmd_write
-;	movlw	0xFF
-;	call	data_write
-;		
-;	movlw	0xBB	;sets x = 3
-;	call	cmd_write
-;	movlw	0x7B	;sets y = 59
-;	call	cmd_write
-;	movlw	0xFF
-;	call	data_write
-;		
-;	movlw	0xBC	;sets x = 4
-;	call	cmd_write
-;	movlw	0x7B	;sets y = 59
-;	call	cmd_write
-;	movlw	0xFF
-;	call	data_write
-;		
-;	movlw	0xBD	;sets x = 5
-;	call	cmd_write
-;	movlw	0x7B	;sets y = 59
-;	call	cmd_write
-;	movlw	0xFF
-;	call	data_write
-;	
+	call glcd_start_right	    
+	
+	;write left grid and naughts box
+	movlw	0xB8	;sets x = 0
+	movwf	x_ad
+	movlw   0x40	;sets y = 0
+	movwf   y_ad
+	
+	clrf	ct3	;counts its done all 6 rows
+	
+	
+	bigloop2	    ;writes a line then 16 one with the top filled, x3, then a full, then 8 empties all x6 
+	    incf    ct3	
+	    movf    x_ad, W
+	    call    c_w
+	    movf    y_ad, W
+	    call    c_w
+	    
+	    movlw   0x01	
+	    call    d_w	;writes y = 0
+	    call    d_w  ;writes y = 1 
+	    call    d_w  ;writes y = 2
+	    call    d_w  ;writes y = 3  
+	    call    d_w  ;writes y = 4  
+	    call    d_w	;writes y = 5
+	    call    d_w	;writes y = 6
+
+	    call    threesquare	;writes	y = 7 - y = 57 , 3x full then top one
+	    
+	
+	    
+	    movlw   0xFF	
+	    call    d_w	;writes y = 58
+	    movlw   0x00
+	    call    d_w	;writes y = 59
+	    call    d_w	;writes y = 60
+	    call    d_w	;writes y = 61
+	    call    d_w	;writes y = 62
+	    call    d_w	;writes y = 63
+	    
+	    incf    x_ad
+	    movlw   0x06	;counter if done six times
+	    cpfseq  ct3		;sees if its done it six times.	
+	    goto    bigloop2
+	    
+	
 ;	;write crosses box and bottom line of the grid
-;	call	crosses
-;			
-;	
+	call	crosses
+			
 	return
 
 	
-write_eg
-	clrf	ct
+threesquare	;writes a full one, then 16 one at top, all times 3
+	clrf	ct2	;checks for three times 
 	
-	sixteen
-	    movlw   0x80
-	    call    data_write
-	    incf    ct
-	    movlw   0x10
-	    cpfseq  y_ad	;if its got to the center
-	    goto sixteen
+	loop16
+	        incf    ct2
+	        movlw   0xFF
+	        call    d_w
+		clrf	ct  ;checks for 16 times
+	
+		sixteen
+			movlw   0x01
+			call    d_w
+			incf    ct
+			movlw   0x10
+			cpfseq  ct	;if its done 16
+			goto sixteen    
+	        
+		
+		movlw   0x03	;counter if done three times
+	        cpfseq  ct2		;sees if its done it three times.	
+	        goto    loop16
+	
+	return
+	
+	
+
 	    
 	return    
 
@@ -278,7 +201,7 @@ write_eg
 ;	;Write data
 ;	movlw	0x00
 ;	movwf	PORTD
-;	call	data_write
+;	call	d_w
 ;	
 ;	
 ;	call	delay
@@ -288,7 +211,7 @@ write_eg
 	
 	
 	
-data_write		
+d_w	;writes data to the GLCD		
 	
 	; chip select signal, to select and enable which half you want
 	; E pulsed from low to high.
@@ -303,11 +226,12 @@ data_write
 	bsf	LATB,RB4
 	call	delay
 	bcf	LATB,RB4
+	call	delay
 	return
 
 	
 	
-cmd_write
+c_w	;writes a command to the GLCD
 	movwf	PORTD
 	; Sets RS to 0
 	bcf	LATB, RB2
