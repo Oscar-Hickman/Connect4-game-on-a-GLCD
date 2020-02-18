@@ -1,16 +1,8 @@
 #include p18f87k22.inc
 	
-    global move, fill_1, fill_2, fill_3
-    extern  key_out, c_w, d_w, glcd_start_left, glcd_start_right, Keypad_test, go
-    
-    acs0	udata_acs   ; reserve data space in access ram
-    fill_1	res 1	    ; number of items in first column
-    fill_2	res 1	    ; number of items in second column
-    fill_3	res 1	    ; number of items in third column    
-    fill_4	res 1	    ; number of items in fourth column
-    fill_5	res 1	    ; number of items in fifth column
-    fill_6	res 1	    ; number of items in sixth column
-    fill_7	res 1	    ; number of items in seventh column
+    global move
+    extern  key_out, c_w, d_w, glcd_start_left, glcd_start_right, Keypad_test, go, fill_1, fill_2, fill_3, fill_4, fill_5, fill_6, fill_7
+ 
     
 moves	code
 
