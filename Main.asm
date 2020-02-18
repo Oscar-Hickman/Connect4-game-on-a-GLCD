@@ -22,6 +22,13 @@ Main code
  
 start	
 	clrf	go
+	clrf	fill_1
+	clrf	fill_2
+	clrf	fill_3
+	clrf	fill_4
+	clrf	fill_5
+	clrf	fill_6
+	clrf	fill_7
 	
 	;Give the glcd the initial grid and player turns
 	call glcd_grid
