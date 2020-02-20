@@ -1,7 +1,7 @@
 #include p18f87k22.inc
 
-    extern  glcd_start_left, glcd_start_right, Keypad_test, glcd_grid, turn, move
-    global  go, fill_1, fil_2, fill_3, fill_4, fill_5, fill_6, fill_7
+    extern  glcd_start_left, glcd_start_right, Keypad_test, glcd_grid, turn, move, ifwinner, winnerscreen, won
+    global  go, fill_1, fill_2, fill_3, fill_4, fill_5, fill_6, fill_7
     
 Reset_vector code
     org 0x0000
@@ -33,31 +33,22 @@ start
 	;Give the glcd the initial grid and player turns
 	call glcd_grid
 	
-	call turn
 	
-	;goto press
+	Connect4loop
+	
+		call turn   ;switch to others go
  
-	call Keypad_test
+		call Keypad_test
 	
-	call move
+		call move   ;implement move
 	
-	call turn
+		call won    ;see if winner	 
+		
+		movlw	0x01
+		cpfseq	ifwinner
+		goto Connect4loop
 	
-	call Keypad_test
-	
-	call move
-	
-	call turn
-	
-	goto $
-
-
-	
-	
-;implement move
-;see if winner	goto 
-;switch to others go
-	
+		goto winnerscreen
 	
     end
 	

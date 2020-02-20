@@ -68,9 +68,9 @@ glcd_start_right
 glcd_grid
 	call glcd_start_left	;write left grid and naughts box
 	
-	movlw	0xB8	;sets x = 0
+	movlw	0xB8	;sets x = 0, B8=10111000
 	movwf	x_ad
-	movlw   0x40	;sets y = 0
+	movlw   0x40	;sets y = 0, 40=01000000
 	movwf   y_ad
 	
 	clrf	ct3	;counts its done all 6 rows

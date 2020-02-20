@@ -70,7 +70,7 @@ nau	;fills the naughts box - when go = 0x00 (and empties the crosses box)
 	movlw	0x75	;sets y = 53
 	call	c_w
 	
-	movlw	0x50
+	movlw	0x40
 	call	d_w  ;y = 53
 	call	d_w  ;y = 54
 	call	d_w  ;y = 55
