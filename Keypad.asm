@@ -1,7 +1,7 @@
 #include p18f87k22.inc
 	
 	global  Keypad_test, key_out
-	extern	LCD_delay_x4us	
+	extern	LCD_delay_x4us, start
 
 acs0	udata_acs   ; reserve data space in access ram
 key_out res 1  ; column which player wants to play to
@@ -65,17 +65,8 @@ Col2
 	movlw	0xF0	       ;Keypad column
 	movwf	TRISE, ACCESS
 	call	LCD_delay_x4us
-	movlw	0xB0
-	CPFSEQ	PORTE	       ;equal to third row
-	goto	C2Row2
-	;8 Pressed
-	movlw	0x08	
-	movwf	key_out
-	return
-	
-C2Row2
 	movlw	0xD0
-	CPFSEQ	PORTE	       ;equal to second row
+	CPFSEQ	PORTE	       ;equal to second row ;5
 	goto	C2Row1
 	;5 Pressed
 	movlw	0x05	
@@ -84,7 +75,7 @@ C2Row2
 	
 C2Row1
 	movlw	0xE0
-	CPFSEQ	PORTE	       ;equal to first row
+	CPFSEQ	PORTE	       ;equal to first row  ;2
 	goto	Col3
 	;2 Pressed
 	movlw	0x02	
@@ -97,21 +88,12 @@ C2Row1
 Col3	
 	movlw	0x0B
 	CPFSEQ	PORTE	       ;equal to third column (3,6,9)
-	goto	Keypad_test
+	goto	Col4
 	movlw	0xF0	       ;Keypad column
 	movwf	TRISE, ACCESS
 	call	LCD_delay_x4us
-	movlw	0xB0
-	CPFSEQ	PORTE	       ;equal to third row
-	goto	C3Row2
-	;9 Pressed
-	movlw	0x09	
-	movwf	key_out
-	return
-	
-C3Row2
 	movlw	0xD0
-	CPFSEQ	PORTE	       ;equal to second row
+	CPFSEQ	PORTE	       ;equal to second row ;6
 	goto	C3Row1
 	;6 Pressed
 	movlw	0x06	
@@ -120,11 +102,26 @@ C3Row2
 	
 C3Row1
 	movlw	0xE0
-	CPFSEQ	PORTE	       ;equal to first row
-	goto	Keypad_test
+	CPFSEQ	PORTE	       ;equal to first row  ;3
+	goto	Col4
 	;3 Pressed
 	movlw	0x03	
 	movwf	key_out
 	return
-
+	
+	
+Col4	;clear screen
+	movlw	0x07
+	CPFSEQ	PORTE	       ;equal to fourth column (C)
+	goto	Keypad_test
+	movlw	0xF0	       ;Keypad column
+	movwf	TRISE, ACCESS
+	call	LCD_delay_x4us
+	movlw	0x70
+	CPFSEQ	PORTE	       ;equal to fourth row ;6
+	goto	Keypad_test
+	;C Pressed
+	goto	start
+	
+	
     end

@@ -12,7 +12,7 @@ Winner	code
 won   ;determines whether a player has won the game
 
 	clrf    ifwinner
-	return
+
 	;1)looks at most recent move 
 
 	
@@ -72,9 +72,10 @@ won   ;determines whether a player has won the game
 	;9)return cos no-ones won
 	
 
+	
 	;10)displays a winner screen depending on whos turn it is
 
-	
+	return
 	
 winnerscreen
 	return

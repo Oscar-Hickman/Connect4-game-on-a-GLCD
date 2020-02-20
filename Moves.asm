@@ -1,9 +1,16 @@
 #include p18f87k22.inc
 	
-    global move
+    global move, try, target_col, target_row, temp, squares
     extern  key_out, c_w, d_w, glcd_start_left, glcd_start_right, Keypad_test, go, fill_1, fill_2, fill_3, fill_4, fill_5, fill_6, fill_7
  
     
+acs0	udata_acs   ; reserve data space in access ram
+target_col res 1
+target_row res 1
+temp	   res 1    ;value you want to move (0x01 for naughts, 0x02 for crosses)
+squares    res	0x2A	;fills up depending on the values of the 42 squares, 0x01 for naughts, 0x02 for crosses
+
+     
 moves	code
 
 move	
@@ -25,6 +32,13 @@ move
 			call	c_w	;sets y = 5
 			call	fill_square
 			incf	fill_1
+			
+			;fill digital version
+			movlw	0x00	
+			movwf	target_col  ;digital column	
+			movlw	0x00	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 		
 		s2
@@ -39,6 +53,13 @@ move
 			call	c_w	;sets y = 5
 			call	fill_square
 			incf	fill_1
+			
+			;fill digital version
+			movlw	0x00	
+			movwf	target_col  ;digital column	
+			movlw	0x01
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 		
 		s3
@@ -53,6 +74,13 @@ move
 			call	c_w	;sets y = 5
 			call	fill_square
 			incf	fill_1
+			
+			;fill digital version
+			movlw	0x00	
+			movwf	target_col  ;digital column	
+			movlw	0x02	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 			
@@ -68,6 +96,13 @@ move
 			call	c_w	;sets y = 5
 			call	fill_square
 			incf	fill_1
+			
+			;fill digital version
+			movlw	0x00	
+			movwf	target_col  ;digital column	
+			movlw	0x03	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 			
@@ -83,6 +118,13 @@ move
 			call	c_w	;sets y = 5
 			call	fill_square
 			incf	fill_1
+			
+			;fill digital version
+			movlw	0x00	
+			movwf	target_col  ;digital column	
+			movlw	0x04	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 		s6
@@ -97,6 +139,13 @@ move
 			call	c_w	;sets y = 5
 			call	fill_square			
 			incf	fill_1
+			
+			;fill digital version
+			movlw	0x00	
+			movwf	target_col  ;digital column	
+			movlw	0x05	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 	
 			
@@ -120,6 +169,13 @@ move
 			call	c_w	;sets y = 22
 			call	fill_square
 			incf	fill_2
+			
+			;fill digital version
+			movlw	0x01	
+			movwf	target_col  ;digital column	
+			movlw	0x00	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 		
 		s8
@@ -134,6 +190,13 @@ move
 			call	c_w	;sets y = 22
 			call	fill_square
 			incf	fill_2
+			
+			;fill digital version
+			movlw	0x01	
+			movwf	target_col  ;digital column	
+			movlw	0x01	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 		
 		s9
@@ -148,6 +211,13 @@ move
 			call	c_w	;sets y = 22
 			call	fill_square
 			incf	fill_2
+			
+			;fill digital version
+			movlw	0x01	
+			movwf	target_col  ;digital column	
+			movlw	0x02	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 			
@@ -163,6 +233,13 @@ move
 			call	c_w	;sets y = 22
 			call	fill_square
 			incf	fill_2
+			
+			;fill digital version
+			movlw	0x01	
+			movwf	target_col  ;digital column	
+			movlw	0x03	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 			
@@ -178,6 +255,13 @@ move
 			call	c_w	;sets y = 22
 			call	fill_square
 			incf	fill_2
+			
+			;fill digital version
+			movlw	0x01	
+			movwf	target_col  ;digital column	
+			movlw	0x04	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 		s12
@@ -192,6 +276,13 @@ move
 			call	c_w	;sets y = 22
 			call	fill_square			
 			incf	fill_2
+			
+			;fill digital version
+			movlw	0x01	
+			movwf	target_col  ;digital column	
+			movlw	0x05	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 	    
 	    
@@ -218,6 +309,13 @@ move
 			call	c_w	;sets y = 39
 			call	fill_square
 			incf	fill_3
+			
+			;fill digital version
+			movlw	0x02	
+			movwf	target_col  ;digital column	
+			movlw	0x00	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 		
 		s14
@@ -232,6 +330,13 @@ move
 			call	c_w	;sets y = 39
 			call	fill_square
 			incf	fill_3
+			
+			;fill digital version
+			movlw	0x02	
+			movwf	target_col  ;digital column	
+			movlw	0x01	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 		
 		s15
@@ -246,6 +351,13 @@ move
 			call	c_w	;sets y = 39
 			call	fill_square
 			incf	fill_3
+			
+			;fill digital version
+			movlw	0x02	
+			movwf	target_col  ;digital column	
+			movlw	0x03	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 			
@@ -261,6 +373,13 @@ move
 			call	c_w	;sets y = 39
 			call	fill_square
 			incf	fill_3
+			
+			;fill digital version
+			movlw	0x02	
+			movwf	target_col  ;digital column	
+			movlw	0x04	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 			
@@ -276,6 +395,13 @@ move
 			call	c_w	;sets y = 39
 			call	fill_square
 			incf	fill_3
+			
+			;fill digital version
+			movlw	0x02	
+			movwf	target_col  ;digital column	
+			movlw	0x05	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 		s18
@@ -290,6 +416,13 @@ move
 			call	c_w	;sets y = 39
 			call	fill_square			
 			incf	fill_3
+			
+			;fill digital version
+			movlw	0x02	
+			movwf	target_col  ;digital column	
+			movlw	0x06	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 	
 	    
@@ -323,6 +456,13 @@ move
 			call	midright
 			
 			incf	fill_4
+			
+			;fill digital version
+			movlw	0x03	
+			movwf	target_col  ;digital column	
+			movlw	0x00	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 		
 		s20
@@ -347,6 +487,13 @@ move
 			
 			
 			incf	fill_4
+			
+			;fill digital version
+			movlw	0x03	
+			movwf	target_col  ;digital column	
+			movlw	0x01	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 		
 		s21
@@ -371,6 +518,13 @@ move
 			
 			
 			incf	fill_4
+			
+			;fill digital version
+			movlw	0x03	
+			movwf	target_col  ;digital column	
+			movlw	0x02	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 			
@@ -396,6 +550,13 @@ move
 			
 			
 			incf	fill_4
+			
+			;fill digital version
+			movlw	0x03	
+			movwf	target_col  ;digital column	
+			movlw	0x03	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 			
@@ -421,6 +582,13 @@ move
 			
 			
 			incf	fill_4
+			
+			;fill digital version
+			movlw	0x03	
+			movwf	target_col  ;digital column	
+			movlw	0x04	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 		s24
@@ -445,6 +613,13 @@ move
 			
 			
 			incf	fill_4
+			
+			;fill digital version
+			movlw	0x03	
+			movwf	target_col  ;digital column	
+			movlw	0x05	
+			movwf	target_row  ;digital row
+			call	digital_write
 			return
 			
 	    
@@ -549,7 +724,7 @@ move
 		movlw	0x06
 		CPFSEQ	key_out	       
 		goto	fill_col7
-		goto	s13
+		goto	s31
 		
 		s31
 			movlw	0x00	;column is empty
@@ -732,8 +907,9 @@ move
 	
 	
 Back	;the column selected is full - select a different button
-	clrf	key_out	    
-	goto	Keypad_test	
+	clrf	key_out
+	call	Keypad_test
+	goto	move
 	
 	
 	
@@ -837,7 +1013,6 @@ midleft	    ;fills the left half of the middle squares
 		call	d_w	;col_6 of square
 		movlw	0x11
 		call	d_w	;col_7 of square
-		movlw	0x39
 		return
 	
 midright    ;fills the right half of the middle squares
@@ -847,7 +1022,8 @@ midright    ;fills the right half of the middle squares
 	goto	write_cross_right
 	
 	write_naught_right
-		;call	d_w	;col_8 of square
+		movlw	0x45    
+	        call	d_w	;col_8 of square
 		call	d_w	;col_9 of square
 		call	d_w	;col_10 of square
 		movlw	0x39
@@ -856,11 +1032,11 @@ midright    ;fills the right half of the middle squares
 		call	d_w	;col_12 of square
 		call	d_w	;col_13 of square
 		call	d_w	;col_14 of square
-		call	d_w	;col_15 of square
 		return
 	
 	write_cross_right
-		;call	d_w	;col_8 of square
+		movlw	0x39    
+	        call	d_w	;col_8 of square
 		movlw	0x6D
 		call	d_w	;col_9 of square
 		movlw	0x45
@@ -870,6 +1046,64 @@ midright    ;fills the right half of the middle squares
 		call	d_w	;col_12 of square
 		call	d_w	;col_13 of square
 		call	d_w	;col_14 of square
-		call	d_w	;col_15 of square
 		return
+		
+		
+		
+		
+    
+digital_write ;writes data to the stored version 'naughts'
+    
+	;set FSR0 to start of array    
+	lfsr    FSR0, squares
+    
+	;increment FSR0 by number of column (FSR0) gives the location
+	movff   target_col, W
+	addwf   FSR0
+    
+	;multiply row number by 7 since rows are 7 columns
+	movff   target_row,W
+	mullw   0x07
+	addwf   FSR0
+
+
+	;writes value 0x01 if crosses or 0x02 if naughts
+	;movff   temp,W
+	
+	movlw	go  ;go equal to 0x01 if its naughts go and vica versa
+	CPFSEQ	0x00
+	goto	digital_write_naught
+	goto	digital_write_cross
+	
+	
+		digital_write_naughts
+		    movlw   0x01
+		    movwf   POSTINC0   ; move data from W to given byte (move from f to w to read)
+		    return
+		
+		digital_write_crosses
+		    movlw   0x02
+		    movwf   POSTINC0
+		    return
+
+		   
+		    
+digital_read ;reads data from the stored version 'naughts'. moves to W
+    
+	;set FSR0 to start of array    
+	lfsr    FSR0, squares
+    
+	;increment FSR0 by number of column (FSR0) gives the location
+	movff   target_col, W
+	addwf   FSR0
+    
+	;multiply row number by 7 since rows are 7 columns
+	movff   target_row,W
+	mullw   0x07
+	addwf   FSR0
+    
+	;reads value into W
+	movff   INDF0, W   ; move data from position to W
+	return
+    
 end

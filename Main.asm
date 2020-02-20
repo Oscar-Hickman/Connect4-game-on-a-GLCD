@@ -1,11 +1,12 @@
 #include p18f87k22.inc
 
-    extern  glcd_start_left, glcd_start_right, Keypad_test, glcd_grid, turn, move, ifwinner, winnerscreen, won
-    global  go, fill_1, fill_2, fill_3, fill_4, fill_5, fill_6, fill_7
+    extern  glcd_start_left, glcd_start_right, Keypad_test, glcd_grid, turn, move, ifwinner, winnerscreen, won;, ;try
+    global  go, fill_1, fill_2, fill_3, fill_4, fill_5, fill_6, fill_7, start
     
 Reset_vector code
     org 0x0000
-    goto start
+    goto start 
+    
 	
 
 acs0	udata_acs   ; reserve data space in access ram
@@ -49,6 +50,6 @@ start
 		goto Connect4loop
 	
 		goto winnerscreen
-	
+		
     end
 	

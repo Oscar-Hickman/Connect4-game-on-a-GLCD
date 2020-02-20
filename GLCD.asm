@@ -2,7 +2,7 @@
 	
 	
     global glcd_start_left, glcd_start_right, c_w, d_w, glcd_grid, glcd_start_left, glcd_start_right
-    extern  naughts, crosses
+    extern  naughts, crosses, LCD_delay_x4us
 
 	
 acs0	udata_acs   ; reserve data space in access ram
@@ -194,9 +194,6 @@ threesquare	;writes a full one, then 16 one at top, all times 3
 	
 	
 
-	    
-	return    
-
 ;write_data	
 ;	;Write data
 ;	movlw	0x00
@@ -256,4 +253,5 @@ delay_1	movff	delay_count,delay_count3
 delay_2	decfsz	delay_count3
 	bra delay_2
 	return
+	
     end
