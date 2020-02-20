@@ -1,6 +1,6 @@
 #include p18f87k22.inc
 
-    extern  glcd_start_left, glcd_start_right, Keypad_test, glcd_grid, turn, move, ifwinner, winnerscreen, won;, ;try
+    extern  glcd_start_left, glcd_start_right, Keypad_test, glcd_grid, turn, move, ifwinner, winnerscreen, won
     global  go, fill_1, fill_2, fill_3, fill_4, fill_5, fill_6, fill_7, start
     
 Reset_vector code

@@ -1,6 +1,6 @@
 #include p18f87k22.inc
 	
-    global move, try, target_col, target_row, temp, squares
+    global move, target_col, target_row, temp, squares
     extern  key_out, c_w, d_w, glcd_start_left, glcd_start_right, Keypad_test, go, fill_1, fill_2, fill_3, fill_4, fill_5, fill_6, fill_7
  
     
@@ -1076,12 +1076,12 @@ digital_write ;writes data to the stored version 'naughts'
 	goto	digital_write_cross
 	
 	
-		digital_write_naughts
+		digital_write_naught
 		    movlw   0x01
 		    movwf   POSTINC0   ; move data from W to given byte (move from f to w to read)
 		    return
-		
-		digital_write_crosses
+	
+		digital_write_cross
 		    movlw   0x02
 		    movwf   POSTINC0
 		    return
