@@ -193,33 +193,14 @@ threesquare	;writes a full one, then 16 one at top, all times 3
 	return
 	
 	
-
-;write_data	
-;	;Write data
-;	movlw	0x00
-;	movwf	PORTD
-;	call	d_w
-;	
-;	
-;	call	delay
-;	goto 	glcd_start		    ; Re-run program from start
-
-
-	
-	
-	
 d_w	;writes data to the GLCD		
-	
-	; chip select signal, to select and enable which half you want
-	; E pulsed from low to high.
-	; rst pin
+	; moves input from W to the data bus
 	movwf	PORTD
-	
 	; Sets RS to 1
 	bsf	LATB, RB2
 	; Sets R/w to 0
 	bcf	LATB, RB3	
-	; High to low pulse on enable
+	; E set from low to high.
 	bsf	LATB,RB4
 	call	delay
 	bcf	LATB,RB4
@@ -234,24 +215,25 @@ c_w	;writes a command to the GLCD
 	bcf	LATB, RB2
 	; Sets R/W to 0
 	bcf	LATB, RB3
-	; Sets E to 1 to 0
+	; Sets E from low to high.
 	bsf	LATB,RB4
 	call	delay
 	bcf	LATB,RB4
 	call	delay
 	return
 
+	
 delay	clrf	delay_count
 	clrf	delay_count2
 	
 delay_1	movff	delay_count,delay_count3
-	call	delay_2
+;	call	delay_2
 	decfsz	delay_count2
 	bra	delay_1	   
 	return
 
-delay_2	decfsz	delay_count3
-	bra delay_2
-	return
+;delay_2	decfsz	delay_count3
+;	bra delay_2
+;	return
 	
     end

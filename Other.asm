@@ -2,7 +2,9 @@
     
 Other code
  
- 
+
+;target_col res 1
+;target_row res 1
  	
 ;	;Nothing Pressed
 ;	movlw	0xF0

@@ -1,6 +1,6 @@
 #include p18f87k22.inc
 	
-	global  Keypad_test, key_out
+	global  Keypad_test, key_out, Keypad_reset, game_reset
 	extern	LCD_delay_x4us, start
 
 acs0	udata_acs   ; reserve data space in access ram
@@ -111,6 +111,61 @@ C3Row1
 	
 	
 Col4	;clear screen
+	movlw	0x07
+	CPFSEQ	PORTE	       ;equal to fourth column (C)
+	goto	Keypad_test
+	movlw	0xF0	       ;Keypad column
+	movwf	TRISE, ACCESS
+	call	LCD_delay_x4us
+	movlw	0x70
+	CPFSEQ	PORTE	       ;equal to fourth row ;6
+	goto	Keypad_test
+	;C Pressed
+	goto	start
+	
+	
+Keypad_reset
+	movlw	0x00
+	;movwf	TRISJ, ACCESS	;getting output ready
+	clrf	key_out		;intially 0
+	
+	banksel PADCFG1 ; PADCFG1 is not in Access Bank!!
+	bsf	PADCFG1,REPU,BANKED
+	clrf	LATE
+	
+	;set port 0-3 high
+	;see which of 4-7 low
+	
+	movlw	0x0F	;Keypad row
+	movwf	TRISE, ACCESS
+	call	LCD_delay_x4us
+	
+	movlw	0x0F
+	CPFSEQ	PORTE	       ;equal to first column (1,4,7) 
+	goto	Keypad_reset
+	movlw	0xF0	       ;Keypad column
+	movwf	TRISE, ACCESS
+	call	LCD_delay_x4us
+	movlw	0xF0
+	CPFSEQ	PORTE	       ;equal to third row
+	goto	Keypad_reset
+	return
+	
+game_reset
+	movlw	0x00
+	;movwf	TRISJ, ACCESS	;getting output ready
+	clrf	key_out		;intially 0
+	
+	banksel PADCFG1 ; PADCFG1 is not in Access Bank!!
+	bsf	PADCFG1,REPU,BANKED
+	clrf	LATE
+	
+	;set port 0-3 high
+	;see which of 4-7 low
+	
+	movlw	0x0F	;Keypad row
+	movwf	TRISE, ACCESS
+	call	LCD_delay_x4us
 	movlw	0x07
 	CPFSEQ	PORTE	       ;equal to fourth column (C)
 	goto	Keypad_test

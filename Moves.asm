@@ -1,15 +1,23 @@
 #include p18f87k22.inc
 	
-    global move, target_col, target_row, temp, squares
+    global move, target_col, target_row, last_mov_row, last_mov_col, digital_read, squares0, squares1, squares2, squares3, squares4, squares5, init_digital_grid, temp
     extern  key_out, c_w, d_w, glcd_start_left, glcd_start_right, Keypad_test, go, fill_1, fill_2, fill_3, fill_4, fill_5, fill_6, fill_7
  
     
 acs0	udata_acs   ; reserve data space in access ram
 target_col res 1
 target_row res 1
-temp	   res 1    ;value you want to move (0x01 for naughts, 0x02 for crosses)
-squares    res	0x2A	;fills up depending on the values of the 42 squares, 0x01 for naughts, 0x02 for crosses
-
+last_mov_row   res 1    ; fills in the value of the last move
+last_mov_col	res 1
+squares0   res 0x07 ;fills up depending on the values of the 42 squares, 0x01 for naughts, 0x02 for crosses
+squares1   res 0x07
+squares2   res 0x07
+squares3   res 0x07
+squares4   res 0x07
+squares5   res 0x07
+temp	   res 1
+init	   res 1
+   
      
 moves	code
 
@@ -39,6 +47,12 @@ move
 			movlw	0x00	
 			movwf	target_row  ;digital row
 			call	digital_write
+			
+			;update last move
+			movlw	0x00
+			movwf	last_mov_row
+			movlw	0x00
+			movwf	last_mov_col
 			return
 		
 		s2
@@ -60,6 +74,12 @@ move
 			movlw	0x01
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x01
+			movwf	last_mov_row
+			movlw	0x00
+			movwf	last_mov_col
 			return
 		
 		s3
@@ -81,6 +101,12 @@ move
 			movlw	0x02	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x02
+			movwf	last_mov_row
+			movlw	0x00
+			movwf	last_mov_col
 			return
 			
 			
@@ -103,6 +129,12 @@ move
 			movlw	0x03	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x03
+			movwf	last_mov_row
+			movlw	0x00
+			movwf	last_mov_col
 			return
 			
 			
@@ -125,6 +157,12 @@ move
 			movlw	0x04	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x04
+			movwf	last_mov_row
+			movlw	0x00
+			movwf	last_mov_col
 			return
 			
 		s6
@@ -146,6 +184,12 @@ move
 			movlw	0x05	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x05
+			movwf	last_mov_row
+			movlw	0x00
+			movwf	last_mov_col
 			return
 	
 			
@@ -176,6 +220,12 @@ move
 			movlw	0x00	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x00
+			movwf	last_mov_row
+			movlw	0x01
+			movwf	last_mov_col
 			return
 		
 		s8
@@ -197,6 +247,12 @@ move
 			movlw	0x01	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x01
+			movwf	last_mov_row
+			movlw	0x01
+			movwf	last_mov_col
 			return
 		
 		s9
@@ -218,6 +274,12 @@ move
 			movlw	0x02	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x02
+			movwf	last_mov_row
+			movlw	0x01
+			movwf	last_mov_col
 			return
 			
 			
@@ -240,6 +302,12 @@ move
 			movlw	0x03	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x03
+			movwf	last_mov_row
+			movlw	0x01
+			movwf	last_mov_col
 			return
 			
 			
@@ -262,6 +330,12 @@ move
 			movlw	0x04	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x04
+			movwf	last_mov_row
+			movlw	0x01
+			movwf	last_mov_col
 			return
 			
 		s12
@@ -278,11 +352,17 @@ move
 			incf	fill_2
 			
 			;fill digital version
-			movlw	0x01	
+			movlw	0x01
 			movwf	target_col  ;digital column	
 			movlw	0x05	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x05
+			movwf	last_mov_row
+			movlw	0x01
+			movwf	last_mov_col
 			return
 	    
 	    
@@ -316,6 +396,12 @@ move
 			movlw	0x00	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x00
+			movwf	last_mov_row
+			movlw	0x02
+			movwf	last_mov_col
 			return
 		
 		s14
@@ -337,6 +423,12 @@ move
 			movlw	0x01	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x01
+			movwf	last_mov_row
+			movlw	0x02
+			movwf	last_mov_col
 			return
 		
 		s15
@@ -355,9 +447,15 @@ move
 			;fill digital version
 			movlw	0x02	
 			movwf	target_col  ;digital column	
-			movlw	0x03	
+			movlw	0x02	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x02
+			movwf	last_mov_row
+			movlw	0x02
+			movwf	last_mov_col
 			return
 			
 			
@@ -377,9 +475,15 @@ move
 			;fill digital version
 			movlw	0x02	
 			movwf	target_col  ;digital column	
-			movlw	0x04	
+			movlw	0x03	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x03
+			movwf	last_mov_row
+			movlw	0x02
+			movwf	last_mov_col
 			return
 			
 			
@@ -399,9 +503,15 @@ move
 			;fill digital version
 			movlw	0x02	
 			movwf	target_col  ;digital column	
-			movlw	0x05	
+			movlw	0x04	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x04
+			movwf	last_mov_row
+			movlw	0x02
+			movwf	last_mov_col
 			return
 			
 		s18
@@ -420,9 +530,15 @@ move
 			;fill digital version
 			movlw	0x02	
 			movwf	target_col  ;digital column	
-			movlw	0x06	
+			movlw	0x05
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x05
+			movwf	last_mov_row
+			movlw	0x02
+			movwf	last_mov_col
 			return
 	
 	    
@@ -463,6 +579,12 @@ move
 			movlw	0x00	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x00
+			movwf	last_mov_row
+			movlw	0x03
+			movwf	last_mov_col
 			return
 		
 		s20
@@ -494,6 +616,12 @@ move
 			movlw	0x01	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x01
+			movwf	last_mov_row
+			movlw	0x03
+			movwf	last_mov_col
 			return
 		
 		s21
@@ -525,6 +653,12 @@ move
 			movlw	0x02	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x02
+			movwf	last_mov_row
+			movlw	0x03
+			movwf	last_mov_col
 			return
 			
 			
@@ -557,6 +691,12 @@ move
 			movlw	0x03	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x03
+			movwf	last_mov_row
+			movlw	0x03
+			movwf	last_mov_col
 			return
 			
 			
@@ -589,6 +729,12 @@ move
 			movlw	0x04	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x04
+			movwf	last_mov_row
+			movlw	0x03
+			movwf	last_mov_col
 			return
 			
 		s24
@@ -620,6 +766,12 @@ move
 			movlw	0x05	
 			movwf	target_row  ;digital row
 			call	digital_write
+						
+			;update last move
+			movlw	0x05
+			movwf	last_mov_row
+			movlw	0x03
+			movwf	last_mov_col
 			return
 			
 	    
@@ -644,6 +796,19 @@ move
 			
 			
 			incf	fill_5
+						
+			;fill digital version
+			movlw	0x04	
+			movwf	target_col  ;digital column	
+			movlw	0x00	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x00
+			movwf	last_mov_row
+			movlw	0x04
+			movwf	last_mov_col
 			return
 		
 		s26
@@ -658,6 +823,19 @@ move
 			call    c_w	;sets y = 8
 			call	fill_square
 			incf	fill_5
+						
+			;fill digital version
+			movlw	0x04
+			movwf	target_col  ;digital column	
+			movlw	0x01	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x01
+			movwf	last_mov_row
+			movlw	0x04
+			movwf	last_mov_col
 			return
 		
 		s27
@@ -672,6 +850,19 @@ move
 			call    c_w	;sets y = 8
 			call	fill_square
 			incf	fill_5
+						
+			;fill digital version
+			movlw	0x04	
+			movwf	target_col  ;digital column	
+			movlw	0x02	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x02
+			movwf	last_mov_row
+			movlw	0x04
+			movwf	last_mov_col
 			return
 			
 			
@@ -687,6 +878,19 @@ move
 			call    c_w	;sets y = 8
 			call	fill_square
 			incf	fill_5
+						
+			;fill digital version
+			movlw	0x04	
+			movwf	target_col  ;digital column	
+			movlw	0x03	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x03
+			movwf	last_mov_row
+			movlw	0x04
+			movwf	last_mov_col
 			return
 			
 			
@@ -702,6 +906,19 @@ move
 			call    c_w	;sets y = 8
 			call	fill_square
 			incf	fill_5
+						
+			;fill digital version
+			movlw	0x04	
+			movwf	target_col  ;digital column	
+			movlw	0x04	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x04
+			movwf	last_mov_row
+			movlw	0x04
+			movwf	last_mov_col
 			return
 			
 		s30
@@ -716,6 +933,19 @@ move
 			call    c_w	;sets y = 8
 			call	fill_square			
 			incf	fill_5
+						
+			;fill digital version
+			movlw	0x04	
+			movwf	target_col  ;digital column	
+			movlw	0x05	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x05
+			movwf	last_mov_row
+			movlw	0x04
+			movwf	last_mov_col
 			return
 			
 	    
@@ -738,6 +968,19 @@ move
 			call    c_w	;sets y = 25
 			call	fill_square
 			incf	fill_6
+						
+			;fill digital version
+			movlw	0x05	
+			movwf	target_col  ;digital column	
+			movlw	0x00	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x00
+			movwf	last_mov_row
+			movlw	0x05
+			movwf	last_mov_col
 			return
 		
 		s32
@@ -752,6 +995,19 @@ move
 			call    c_w	;sets y = 25
 			call	fill_square
 			incf	fill_6
+						
+			;fill digital version
+			movlw	0x05	
+			movwf	target_col  ;digital column	
+			movlw	0x01	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x01
+			movwf	last_mov_row
+			movlw	0x05
+			movwf	last_mov_col
 			return
 		
 		s33
@@ -766,6 +1022,19 @@ move
 			call    c_w	;sets y = 25
 			call	fill_square
 			incf	fill_6
+						
+			;fill digital version
+			movlw	0x05	
+			movwf	target_col  ;digital column	
+			movlw	0x02	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x02
+			movwf	last_mov_row
+			movlw	0x05
+			movwf	last_mov_col
 			return
 			
 			
@@ -781,6 +1050,19 @@ move
 			call    c_w	;sets y = 25
 			call	fill_square
 			incf	fill_6
+						
+			;fill digital version
+			movlw	0x05	
+			movwf	target_col  ;digital column	
+			movlw	0x03	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x03
+			movwf	last_mov_row
+			movlw	0x05
+			movwf	last_mov_col
 			return
 			
 			
@@ -796,6 +1078,19 @@ move
 			call    c_w	;sets y = 25
 			call	fill_square
 			incf	fill_6
+						
+			;fill digital version
+			movlw	0x05	
+			movwf	target_col  ;digital column	
+			movlw	0x04	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x04
+			movwf	last_mov_row
+			movlw	0x05
+			movwf	last_mov_col
 			return
 			
 		s36
@@ -810,6 +1105,19 @@ move
 			call    c_w	;sets y = 25
 			call	fill_square			
 			incf	fill_6
+						
+			;fill digital version
+			movlw	0x05	
+			movwf	target_col  ;digital column	
+			movlw	0x05	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x05
+			movwf	last_mov_row
+			movlw	0x05
+			movwf	last_mov_col
 			return
 	    
 	    
@@ -828,6 +1136,19 @@ move
 			call    c_w	;sets y = 42
 			call	fill_square
 			incf	fill_7
+						
+			;fill digital version
+			movlw	0x06	
+			movwf	target_col  ;digital column	
+			movlw	0x00	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x00
+			movwf	last_mov_row
+			movlw	0x06
+			movwf	last_mov_col
 			return
 		
 		s38
@@ -842,6 +1163,19 @@ move
 			call    c_w	;sets y = 42
 			call	fill_square
 			incf	fill_7
+						
+			;fill digital version
+			movlw	0x06	
+			movwf	target_col  ;digital column	
+			movlw	0x01	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x01
+			movwf	last_mov_row
+			movlw	0x06
+			movwf	last_mov_col
 			return
 		
 		s39
@@ -856,6 +1190,19 @@ move
 			call    c_w	;sets y = 42
 			call	fill_square
 			incf	fill_7
+						
+			;fill digital version
+			movlw	0x06	
+			movwf	target_col  ;digital column	
+			movlw	0x02	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x02
+			movwf	last_mov_row
+			movlw	0x06
+			movwf	last_mov_col
 			return
 			
 			
@@ -871,6 +1218,19 @@ move
 			call    c_w	;sets y = 42
 			call	fill_square
 			incf	fill_7
+						
+			;fill digital version
+			movlw	0x06	
+			movwf	target_col  ;digital column	
+			movlw	0x03	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x03
+			movwf	last_mov_row
+			movlw	0x06
+			movwf	last_mov_col
 			return
 			
 			
@@ -886,6 +1246,19 @@ move
 			call    c_w	;sets y = 42
 			call	fill_square
 			incf	fill_7
+						
+			;fill digital version
+			movlw	0x06	
+			movwf	target_col  ;digital column	
+			movlw	0x04	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x04
+			movwf	last_mov_row
+			movlw	0x06
+			movwf	last_mov_col
 			return
 			
 		s42
@@ -900,6 +1273,19 @@ move
 			call    c_w	;sets y = 42
 			call	fill_square			
 			incf	fill_7
+						
+			;fill digital version
+			movlw	0x06	
+			movwf	target_col  ;digital column	
+			movlw	0x05	
+			movwf	target_row  ;digital row
+			call	digital_write
+						
+			;update last move
+			movlw	0x05
+			movwf	last_mov_row
+			movlw	0x06
+			movwf	last_mov_col
 			return
 			
 			
@@ -914,8 +1300,10 @@ Back	;the column selected is full - select a different button
 	
 	
 fill_square
-	movlw	go  ;go equal to 0x01 if its naughts go and vica versa
-	CPFSEQ	0x00
+	movlw	0x00
+	movwf	temp
+	movf	go, 0  ;go equal to 0x01 if its naughts go and vica versa
+	CPFSEQ	temp
 	goto	write_naught
 	goto	write_cross
 	
@@ -980,8 +1368,10 @@ fill_square
 
 		
 midleft	    ;fills the left half of the middle squares
-	movlw	go  ;go equal to 0x01 if its naughts go and vica versa
-	CPFSEQ	0x00
+	movlw	0x00
+	movwf	temp
+	movf	go, 0  ;go equal to 0x01 if its naughts go and vica versa
+	CPFSEQ	temp
 	goto	write_naught_left
 	goto	write_cross_left
 	
@@ -1016,8 +1406,10 @@ midleft	    ;fills the left half of the middle squares
 		return
 	
 midright    ;fills the right half of the middle squares
-	movlw	go  ;go equal to 0x01 if its naughts go and vica versa
-	CPFSEQ	0x00
+	movlw	0x00
+	movwf	temp
+	movf	go, 0  ;go equal to 0x01 if its naughts go and vica versa
+	CPFSEQ	temp
 	goto	write_naught_right
 	goto	write_cross_right
 	
@@ -1052,58 +1444,211 @@ midright    ;fills the right half of the middle squares
 		
 		
     
-digital_write ;writes data to the stored version 'naughts'
-    
-	;set FSR0 to start of array    
-	lfsr    FSR0, squares
-    
-	;increment FSR0 by number of column (FSR0) gives the location
-	movff   target_col, W
-	addwf   FSR0
-    
-	;multiply row number by 7 since rows are 7 columns
-	movff   target_row,W
-	mullw   0x07
-	addwf   FSR0
+digital_write ;writes data to the stored version 'squares'
+	goto first_digital_row_write
+		
+	first_digital_row_write   ;first row
+		movlw	0x00
+		cpfseq	target_row
+		goto	second_digital_row_write
+		lfsr    FSR1, squares0
+		goto	digital_column_write
+		
+	second_digital_row_write  ;second row
+		movlw	0x01
+		cpfseq	target_row
+		goto	third_digital_row_write
+		lfsr    FSR1, squares1
+		goto	digital_column_write
+	
+	third_digital_row_write  ;third row
+		movlw	0x02
+		cpfseq	target_row
+		goto	fourth_digital_row_write
+		lfsr    FSR1, squares2
+		goto	digital_column_write
+	
+	fourth_digital_row_write  ;fourth row
+		movlw	0x03
+		cpfseq	target_row
+		goto	fifth_digital_row_write
+		lfsr    FSR1, squares3
+		goto	digital_column_write
+	
+	fifth_digital_row_write  ;fifth row
+		movlw	0x04
+		cpfseq	target_row
+		goto	sixth_digital_row_write
+		lfsr    FSR1, squares4
+		goto	digital_column_write
+	
+	sixth_digital_row_write  ;sixth row
+		lfsr    FSR1, squares5
+		goto	digital_column_write
+	
 
-
-	;writes value 0x01 if crosses or 0x02 if naughts
-	;movff   temp,W
 	
-	movlw	go  ;go equal to 0x01 if its naughts go and vica versa
-	CPFSEQ	0x00
-	goto	digital_write_naught
-	goto	digital_write_cross
+	digital_column_write
+		movlw	0x00
+		cpfseq	init
+		goto	digital_write_empty
+		
+		
+		;increment FSR1 by number of column (FSR1) gives the location
+		movf    target_col, 0
+		addwf   FSR1L
+	
+		movlw	0x00
+		movwf	temp
+		movf	go, 0  ;go equal to 0x01 if its naughts go and vica versa
+		CPFSEQ	temp
+		goto	digital_write_naught
+		goto	digital_write_cross
 	
 	
-		digital_write_naught
-		    movlw   0x01
-		    movwf   POSTINC0   ; move data from W to given byte (move from f to w to read)
-		    return
+			digital_write_naught
+				movlw   0x01
+				movwf   INDF1   ; move data from W to given byte (move from f to w to read)
+				return
 	
-		digital_write_cross
-		    movlw   0x02
-		    movwf   POSTINC0
-		    return
-
+			digital_write_cross
+				movlw   0x02
+				movwf   INDF1
+				return
+				
+			digital_write_empty
+				movlw	0x00
+				movwf	POSTINC1
+				movwf	POSTINC1
+				movwf	POSTINC1
+				movwf	POSTINC1
+				movwf	POSTINC1
+				movwf	POSTINC1
+				movwf	POSTINC1
+				return
 		   
 		    
 digital_read ;reads data from the stored version 'naughts'. moves to W
+	goto check1
+	
+	check1
+		movlw	0x00
+		cpfslt	target_row  ;skips if target row is less than 0
+		goto	check2
+		goto	not_poss
+	
+	check2
+		movlw	0x05
+		cpfsgt	target_row  ;skips if target row is greater than 5
+		goto	check3
+		goto	not_poss
+	
+	
+	check3
+		movlw	0x00
+		cpfslt	target_col  ;skips if target column is less than 0
+		goto	check4
+		goto	not_poss
+	
+	
+	check4
+	        movlw	0x06
+		cpfsgt	target_col  ;skips if target column is greater than 5
+	        goto	first_digital_row_read
+		goto	not_poss
+		
+	
+	first_digital_row_read   ;first row
+		movlw	0x00
+		cpfseq	target_row
+		goto	second_digital_row_read
+		lfsr    FSR1, squares0
+		goto	digital_column_read
+		
+	second_digital_row_read  ;second row
+		movlw	0x01
+		cpfseq	target_row
+		goto	third_digital_row_read
+		lfsr    FSR1, squares1
+		goto	digital_column_read
+	
+	third_digital_row_read  ;third row
+		movlw	0x02
+		cpfseq	target_row
+		goto	fourth_digital_row_read
+		lfsr    FSR1, squares2
+		goto	digital_column_read
+	
+	fourth_digital_row_read  ;fourth row
+		movlw	0x03
+		cpfseq	target_row
+		goto	fifth_digital_row_read
+		lfsr    FSR1, squares3
+		goto	digital_column_read
+	
+	fifth_digital_row_read  ;fifth row
+		movlw	0x04
+		cpfseq	target_row
+		goto	sixth_digital_row_read
+		lfsr    FSR1, squares4
+		goto	digital_column_read
+	
+	sixth_digital_row_read  ;sixth row
+		lfsr    FSR1, squares5
+		goto	digital_column_read
+	
+	
+		
+	digital_column_read	
+		;increment FSR1 by number of column (FSR1) gives the location
+		movf   target_col, W
+		addwf   FSR1L
     
-	;set FSR0 to start of array    
-	lfsr    FSR0, squares
+		;reads value into W
+		movf   INDF1, W   ; move data from position to W
+		return
     
-	;increment FSR0 by number of column (FSR0) gives the location
-	movff   target_col, W
-	addwf   FSR0
-    
-	;multiply row number by 7 since rows are 7 columns
-	movff   target_row,W
-	mullw   0x07
-	addwf   FSR0
-    
-	;reads value into W
-	movff   INDF0, W   ; move data from position to W
+	not_poss
+		;row or column not possible
+		movlw	0x00
+		return
+
+
+		
+		
+init_digital_grid
+	movlw	0x01
+	movwf	init
+	movlw	0x00   
+	movlw	target_col
+	
+	movlw	0x00
+	movwf	target_row
+	call	digital_write
+	
+	movlw	0x01
+	movwf	target_row
+	call	digital_write
+	
+	movlw	0x02
+	movwf	target_row
+	call	digital_write
+	
+	movlw	0x03
+	movwf	target_row
+	call	digital_write
+	
+	movlw	0x04
+	movwf	target_row
+	call	digital_write
+	
+	movlw	0x05
+	movwf	target_row
+	call	digital_write
+	
+	
+	movlw	0x00
+	movwf	init
 	return
-    
+	
 end

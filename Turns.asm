@@ -1,13 +1,13 @@
 #include p18f87k22.inc
 	
     global  turn
-    extern  c_w, d_w, glcd_start_left, glcd_start_right, go
+    extern  c_w, d_w, glcd_start_left, glcd_start_right, go, active_go
    
 Turns	code
 	
 turn	
 	movlw   0x01	;sees whos go it is
-	cpfseq  go		;0x00 for naughts, 0x01 for crosses
+	cpfseq  go	;0x00 for naughts, 0x01 for crosses
 	goto    nau
 	goto	cro
 	
@@ -83,6 +83,7 @@ nau	;fills the naughts box - when go = 0x00 (and empties the crosses box)
 	
 	
 	incf	go
+	decf	active_go
 	return
 	
 	
@@ -160,6 +161,7 @@ cro	;fills the crosses box - when go = 0x01	(and empties the naughts box)
 	call	d_w  ;y = 60
 	
 	decf	go
+	incf	active_go
 	return
 	
 	
