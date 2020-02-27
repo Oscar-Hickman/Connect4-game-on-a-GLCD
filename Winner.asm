@@ -709,6 +709,9 @@ won
 			
 			movlw	0xB9	;sets x = 1
 			call	c_w
+			movlw	0x40	;sets y = 0
+			call	c_w
+			
 			movlw	0x08
 			call	d_w	;y = 0	    End of G
 			movlw	0x00

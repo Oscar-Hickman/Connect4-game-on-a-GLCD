@@ -25,10 +25,10 @@ Main code
  
 start	
     call    Initialisation
-    
     call    glcd_grid  ;Give the glcd the initial grid and player turns
 	
     goto    Connect4loop
+    
     
     Initialisation
 	    clrf	go
@@ -53,7 +53,6 @@ start
 	
 	
 	Connect4loop
-	
 		call turn   ;switch to others go
 		
 		call Keypad_test

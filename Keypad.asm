@@ -168,15 +168,16 @@ game_reset
 	call	LCD_delay_x4us
 	movlw	0x07
 	CPFSEQ	PORTE	       ;equal to fourth column (C)
-	goto	Keypad_test
+	goto	game_reset
 	movlw	0xF0	       ;Keypad column
 	movwf	TRISE, ACCESS
 	call	LCD_delay_x4us
 	movlw	0x70
 	CPFSEQ	PORTE	       ;equal to fourth row ;6
-	goto	Keypad_test
+	goto	game_reset
 	;C Pressed
 	goto	start
+
 	
 	
     end
